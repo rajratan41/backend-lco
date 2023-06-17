@@ -30,11 +30,11 @@ servers:
 
 components:
   securitySchemes:
-    ApiKeyAuth:
+    cookieAuth:
       type: apiKey
       in: cookie
       name: token
-    bearerAuth:
+    BearerAuth:
       type: http
       scheme: bearer
 
@@ -200,8 +200,33 @@ paths:
                 properties:
                   location:
                     type: string
-                  device:
+                  devices:
                     type: string
+        400:
+          description: Bad request
+        500:
+          description: internal sever error
+
+  /courseupload:
+    post:
+      tags:
+        - String
+      summary: uploading course image
+      parameters:
+        - in: header
+          name: auth
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                file:
+                  type: string
+                  format: binary
+      responses:
+        200:
+          description: All good success
         400:
           description: Bad request
         500:

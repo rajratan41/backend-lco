@@ -5,11 +5,12 @@ const app = express();
 // Swagger Docs
 const swaggerUi = require("swagger-ui-express");
 const YAML = require("yamljs");
-
 const swaggerDocument = YAML.load("./swagger.yaml");
+const fileUpload = require("express-fileupload");
 
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 app.use(express.json());
+app.use(fileUpload());
 
 let courses = [
   {
@@ -68,6 +69,16 @@ app.get("/api/v1/coursequery", (req, res) => {
   let device = req.query.device;
 
   res.send({ location, device });
+});
+
+app.post("/api/v1/courseupload", (req, res) => {
+  console.log(req.headers);
+  const file = req.files.file;
+  let path = __dirname + "/images/" + Date.now() + ".jpg";
+
+  file.mv(path, (err) => {
+    res.send(true);
+  });
 });
 
 app.listen(4000, () => {
